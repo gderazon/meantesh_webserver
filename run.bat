@@ -1,1 +1,1 @@
-"%JAVA_HOME%"\bin\java -cp ;lib/* com.meantesh.WebServer
+"%JAVA_HOME%"\bin\java -cp bin;lib/* com.meantesh.WebServer
