@@ -51,6 +51,9 @@ public class HTTPRequest {
     	return parameters;
     }
     
+    /**
+     * Parses data fetched from session to populate the HTTPRequest.
+     */
     private void parse() {
         // parse the first line
         StringTokenizer tokenizer = new StringTokenizer(raw);
@@ -90,6 +93,9 @@ public class HTTPRequest {
         return decoded;
     }    
     
+    /**
+     * 
+     */
     private  Map<String, List<String>> decodeParameters(String queryString) {
         Map<String, List<String>> parms = new HashMap<String, List<String>>();
         if (queryString != null) {

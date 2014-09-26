@@ -4,6 +4,10 @@ import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+/**
+ * Http Response 
+ * @author gderazon
+ */
 public class HTTPResponse {
 	 
     private String version = "HTTP/1.1";

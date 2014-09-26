@@ -10,6 +10,11 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+/**
+ * Once a channel is opened between the client and the server, the HTTP session takes care of reading the data, 
+ * and sending the response. Once response is sent, connection is closed.
+ * @author gderazon
+ */
 public class HTTPSession {
 	private final static Logger logger = Logger.getLogger(HTTPSession.class.getName());
 	
@@ -47,7 +52,7 @@ public class HTTPSession {
     }
 
     /**
-     * Get more data from the stream.
+     * Get data from the stream.
      */
     public boolean readData() throws IOException {
         buffer.limit(buffer.capacity());
@@ -59,7 +64,10 @@ public class HTTPSession {
         buffer.position(mark);
         return true;
     }
-
+    
+    /**
+     * 
+     */
     public void sendResponse(HTTPResponse response) {
         response.addDefaultHeaders();
         try {

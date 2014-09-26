@@ -17,6 +17,7 @@ import com.meantesh.responses.InternalServerError500;
  
 /**
  * Simple Java non-blocking NIO webserver.
+ * Main event loop. Accepts connections and makes sure they are handled.
  * @author Golan Derazon based on md_5
  */
 public class WebServer implements Runnable {
@@ -31,14 +32,13 @@ public class WebServer implements Runnable {
     private int sessionsCount;
 
     /**
-     * Create a new server and immediately binds it.
-     *
-     * @param address the address to bind on
-     * @throws IOException if there are any errors creating the server.
      */
     protected WebServer() throws IOException{
     }
     
+    /**
+     * Loads server configuration and initializes handlers.
+     */
     protected void initServer() throws Exception {
     	serverConf= new ServerConf();
     	serverConf.loadConfiguration();
@@ -48,6 +48,9 @@ public class WebServer implements Runnable {
         staticContentHandler = new StaticContentHandler(serverConf);
     }
     
+    /**
+     * 
+     */
     public void runServer() throws Exception {
     	initServer();
         logger.info("Meantesh server started and waiting for requests.");
@@ -58,11 +61,7 @@ public class WebServer implements Runnable {
     }
     
     /**
-     * Core run method. This is not a thread safe method, however it is non
-     * blocking. If an exception is encountered it will be thrown wrapped in a
-     * RuntimeException, and the server will automatically be {@link #shutDown}
      */
-    @Override
     public final void run() {
         try {
             selector.selectNow();
@@ -153,7 +152,6 @@ public class WebServer implements Runnable {
     }
  
     /**
-     * Shutdown this server, preventing it from handling any more requests.
      */
     public final void shutdown() {
         isRunning = false;
@@ -166,10 +164,17 @@ public class WebServer implements Runnable {
         }
     }
     
+    /**
+     * Returns number of handled sessions.
+     * Implemented for testing purposes.
+     */
     public int getSessionsCount(){
     	return sessionsCount;
     }
     
+    /**
+     * 
+     */
     public static void main(String[] args) throws Exception {
         WebServer server = new WebServer();
         server.runServer();
