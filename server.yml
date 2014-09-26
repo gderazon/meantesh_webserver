@@ -1,0 +1,10 @@
+basic_conf:
+  address: '127.0.0.1'
+  port: 5555
+  root_doc: 'resources'
+
+url_mappings:
+  - url_regexp: '/api/golan/*'
+    handler: com.business_logic.MyBusinessLogic
+  - url_regexp: '/api/asaf/*'
+    handler: com.business_logic.AsafBusinessLogic

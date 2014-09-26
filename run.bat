@@ -1,0 +1,1 @@
+"%JAVA_HOME%"\bin\java -cp ;lib/* com.meantesh.WebServer

@@ -1,0 +1,1 @@
+"%JAVA_HOME%"\bin\java -cp bin;lib/* -cp bin;lib/* org.junit.runner.JUnitCore com.meantesh.MeanteshServerTest
