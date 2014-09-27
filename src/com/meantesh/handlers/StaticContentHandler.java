@@ -6,7 +6,7 @@ import org.apache.commons.io.FileUtils;
 import com.meantesh.HTTPRequest;
 import com.meantesh.HTTPResponse;
 import com.meantesh.ServerConf;
-import com.meantesh.responses.NotFound404;
+import com.meantesh.responses.HttpResponseNotFound;
 
 public class StaticContentHandler implements HttpHandler {
 	
@@ -26,7 +26,7 @@ public class StaticContentHandler implements HttpHandler {
         }
         
         if (!f.exists()){
-        	return new NotFound404(f.getName());
+        	return new HttpResponseNotFound(f.getName());
         }
         byte[] bytes = FileUtils.readFileToByteArray(f);
         response.setContent(bytes);

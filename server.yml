@@ -3,6 +3,13 @@ basic_conf:
   port: 5555
   root_doc: 'resources'
 
+###################################
+#
+# Maps URIs to java classes which implement the com.meantesh.handlers.HttpHandler interface.
+# URI will be handled by the first handler found by the order in the file.
+# URIs which doesn't match any regular expression are handled by the default static content handler.
+#
+###################################
 url_mappings:
   - url_regexp: '/api/golan/*'
     handler: com.business_logic.MyBusinessLogic

@@ -21,6 +21,8 @@ public class HTTPRequest {
     private String version;
     private Map<String, String> headers = new HashMap<String, String>();
     private Map<String, List<String>> parameters =new HashMap<String, List<String>>();
+    private Map<String, List<String>> postParameters =new HashMap<String, List<String>>();
+    
     
     public HTTPRequest(String raw) {
         this.raw = raw;
@@ -50,7 +52,11 @@ public class HTTPRequest {
     public Map<String, List<String>> getParameters(){
     	return parameters;
     }
-    
+
+    public Map<String, List<String>> postParameters(){
+    	return postParameters;
+    }
+
     /**
      * Parses data fetched from session to populate the HTTPRequest.
      */
@@ -63,10 +69,14 @@ public class HTTPRequest {
         // parse the headers
         String[] lines = raw.split("\r\n");
         for (int i = 1; i < lines.length; i++) {
+        	if (lines[i].equals("")){
+        		break;
+        	}
             String[] keyVal = lines[i].split(":", 2);
             headers.put(keyVal[0], keyVal[1]);
         }
-        
+        String content = lines[lines.length-1];
+        postParameters = decodeParameters(content);
         // Decode parameters from the location
         int qmi = location.indexOf('?');
         if (qmi >= 0) {

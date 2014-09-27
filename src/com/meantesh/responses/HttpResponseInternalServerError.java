@@ -2,17 +2,17 @@ package com.meantesh.responses;
 
 import com.meantesh.HTTPResponse;
 
-public class InternalServerError500 extends HTTPResponse {
-	public InternalServerError500(){
+public class HttpResponseInternalServerError extends HTTPResponse {
+	public HttpResponseInternalServerError(){
 		super(500,"INTERNAL SERVER ERROR");
 	}
 
-	public InternalServerError500(Throwable t){
+	public HttpResponseInternalServerError(Throwable t){
 		this();
 		setContent(String.format("Internal Server Error: %s ",t.getLocalizedMessage()));
 	}
 	
-	public InternalServerError500(String message){
+	public HttpResponseInternalServerError(String message){
 		this();
 		setContent(String.format("Internal Server Error: %s ",message));
 	}

@@ -20,6 +20,11 @@ public class HTTPResponse {
     	
     }
 
+    public HTTPResponse(String content) {
+    	this();
+    	setContent(content);
+    }
+
     public HTTPResponse(int responseCode,String responseReason) {
     	this.responseCode = responseCode;
     	this.responseReason = responseReason;

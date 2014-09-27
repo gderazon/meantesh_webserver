@@ -12,8 +12,8 @@ import java.util.logging.Logger;
 
 import com.meantesh.handlers.HttpHandler;
 import com.meantesh.handlers.StaticContentHandler;
-import com.meantesh.responses.BadRequest400;
-import com.meantesh.responses.InternalServerError500;
+import com.meantesh.responses.HttpResponseBadRequest;
+import com.meantesh.responses.HttpResponseInternalServerError;
  
 /**
  * Simple Java non-blocking NIO webserver.
@@ -98,10 +98,7 @@ public class WebServer implements Runnable {
                         if (hasData){
                             // decode the message
                             String line = session.readLine();
-                            if (line == null){
-                            	throw new BadRequest();
-                            }
-                            while (line != null && !line.isEmpty()) {
+                            while (line != null) {
                             	line = session.readLine();
                             }
                         	HTTPRequest request = null;
@@ -116,7 +113,7 @@ public class WebServer implements Runnable {
                     }
                 }catch (BadRequest br){
                     if (key.attachment() instanceof HTTPSession) {
-                        ((HTTPSession) key.attachment()).sendResponse(new BadRequest400(""));
+                        ((HTTPSession) key.attachment()).sendResponse(new HttpResponseBadRequest(""));
                     }
                 } catch (Exception ex) {
                 	logger.log(Level.SEVERE, "Error handling client: " + key.channel(),ex);
@@ -147,7 +144,7 @@ public class WebServer implements Runnable {
     		}
     		return staticContentHandler.handleRequest(request);
     	}catch (Throwable t) {
-    		return new InternalServerError500(t);
+    		return new HttpResponseInternalServerError(t);
     	}
     }
  

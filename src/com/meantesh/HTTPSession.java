@@ -48,6 +48,10 @@ public class HTTPSession {
             }
             l = c;
         }
+        if (sb.length() > 0){
+            readLines.append(sb);        	
+        	return sb.toString();
+        }
         return null;
     }
 

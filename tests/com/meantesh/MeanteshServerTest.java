@@ -7,11 +7,16 @@ import java.io.DataOutputStream;
 import java.io.InputStreamReader;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.List;
 
+import org.apache.http.NameValuePair;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
+import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -21,6 +26,7 @@ public class MeanteshServerTest {
 	private static WebServer server;
 	private static Thread serverThread;
 	private volatile boolean errorHappened = false;
+	
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
 		serverThread = new Thread(new Runnable() {
@@ -52,6 +58,26 @@ public class MeanteshServerTest {
 		CloseableHttpResponse response1 = httpclient.execute(httpGet);
 		assertTrue(EntityUtils.toString(response1.getEntity()).indexOf(
 				"Meantesh") > -1);
+		httpclient.close();
+	}
+
+	@Test
+	public void testGreenPathWithPost() throws Exception {		
+		CloseableHttpClient httpclient = HttpClients.createDefault();
+		HttpPost httppost = new HttpPost("http://127.0.0.1:5555/api/golan/post");
+		List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(1);
+		nameValuePairs.add(new BasicNameValuePair("registrationid","123456789"));
+		nameValuePairs.add(new BasicNameValuePair("registrationid","123456789"));
+		nameValuePairs.add(new BasicNameValuePair("bame","zizi"));
+		nameValuePairs.add(new BasicNameValuePair("banaeme","top"));
+		httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));		
+		CloseableHttpResponse response1 = httpclient.execute(httppost);
+		String res = EntityUtils.toString(response1.getEntity());
+		assertTrue(res.indexOf("registrationid") > -1);
+		assertTrue(res.indexOf("bame") > -1);
+		assertTrue(res.indexOf("registrationid") > -1);
+		assertTrue(res. indexOf("banaeme") > -1);
+		assertTrue(res.split("123456789", -1).length == 3);
 		httpclient.close();
 	}
 
