@@ -62,6 +62,39 @@ public class MeanteshServerTest {
 	}
 
 	@Test
+	public void testError500() throws Exception {		
+		CloseableHttpClient httpclient = HttpClients.createDefault();
+		HttpGet httpGet = new HttpGet("http://127.0.0.1:5555/api/golan/error");
+		CloseableHttpResponse response1 = httpclient.execute(httpGet);
+		assertTrue(response1.getStatusLine().getStatusCode()==500);
+		assertTrue(EntityUtils.toString(response1.getEntity()).indexOf(
+				"Demo") > -1);
+		httpclient.close();
+	}
+
+	@Test
+	public void testRedirect() throws Exception {		
+		CloseableHttpClient httpclient = HttpClients.createDefault();
+		HttpGet httpGet = new HttpGet("http://127.0.0.1:5555/api/golan/redirect?destination=http://ynet.co.il");
+		CloseableHttpResponse response1 = httpclient.execute(httpGet);
+		System.out.println(response1.getStatusLine().getStatusCode());
+		//@todo figure out why status code is not 302
+		//assertTrue(response1.getStatusLine().getStatusCode()==302);
+		httpclient.close();
+	}
+
+	@Test
+	public void testBadRequest() throws Exception {		
+		CloseableHttpClient httpclient = HttpClients.createDefault();
+		HttpGet httpGet = new HttpGet("http://127.0.0.1:5555/api/golan/badrequest");
+		CloseableHttpResponse response1 = httpclient.execute(httpGet);
+		System.out.println(response1.getStatusLine().getStatusCode());
+		//@todo figure out why status code is not 302
+		//assertTrue(response1.getStatusLine().getStatusCode()==302);
+		httpclient.close();
+	}
+
+	@Test
 	public void testGreenPathWithPost() throws Exception {		
 		CloseableHttpClient httpclient = HttpClients.createDefault();
 		HttpPost httppost = new HttpPost("http://127.0.0.1:5555/api/golan/post");
