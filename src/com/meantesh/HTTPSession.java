@@ -17,55 +17,31 @@ import java.util.logging.Logger;
  */
 public class HTTPSession {
 	private final static Logger logger = Logger.getLogger(HTTPSession.class.getName());
-	
+	private static int BUFFER_SIZE =10240;
 	private Charset charset = Charset.forName("UTF-8");
 	private CharsetEncoder encoder = charset.newEncoder();
     private final SocketChannel channel;
-    private final ByteBuffer buffer = ByteBuffer.allocate(2048);
-    private final StringBuilder readLines = new StringBuilder();
-    private int mark = 0;
+    private final ByteBuffer buffer = ByteBuffer.allocate(BUFFER_SIZE);
+    private String requestData =null;
 
     public HTTPSession(SocketChannel channel) {
         this.channel = channel;
     }
         
     /**
-     * Try to read a line.
-     */
-    public String readLine() throws IOException {
-        StringBuilder sb = new StringBuilder();
-        int l = -1;
-        while (buffer.hasRemaining()) {
-            char c = (char) buffer.get();
-            sb.append(c);
-            if (c == '\n' && l == '\r') {
-                // mark our position
-                mark = buffer.position();
-                // append to the total
-                readLines.append(sb);
-                // return with no line separators
-                return sb.substring(0, sb.length() - 2);
-            }
-            l = c;
-        }
-        if (sb.length() > 0){
-            readLines.append(sb);        	
-        	return sb.toString();
-        }
-        return null;
-    }
-
-    /**
      * Get data from the stream.
      */
-    public boolean readData() throws IOException {
+    public boolean readData() throws IOException {    	
+    	buffer.clear();
         buffer.limit(buffer.capacity());
         int read = channel.read(buffer);
-        if (read == -1) {
-            return false;
+        if (read < 0){
+        	return false;
         }
+        byte[] res = new byte[read];
         buffer.flip();
-        buffer.position(mark);
+        buffer.get(res);
+        requestData = new String(res);
         return true;
     }
     
@@ -86,12 +62,12 @@ public class HTTPSession {
         }
     }
     
-    public String getLines(){
-    	return readLines.toString();
+    public String getRequestData(){
+    	return requestData;
     }
     
     public void close() {
-        try {
+        try {        	
             channel.close();
         } catch (IOException ex) {
         	logger.log(Level.FINE,"Error closing connection.",ex);

@@ -77,7 +77,7 @@ public class MeanteshServerTest {
 		assertTrue(res.indexOf("bame") > -1);
 		assertTrue(res.indexOf("registrationid") > -1);
 		assertTrue(res. indexOf("banaeme") > -1);
-		assertTrue(res.split("123456789", -1).length == 3);
+		assertTrue((res.split("123456789", -1).length)-1 == 2);
 		httpclient.close();
 	}
 

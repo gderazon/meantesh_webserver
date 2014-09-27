@@ -93,25 +93,19 @@ public class WebServer implements Runnable {
                             key.attach(session);
                         }
                         // get more data
-                        boolean hasData = session.readData();
-                        
-                        if (hasData){
-                            // decode the message
-                            String line = session.readLine();
-                            while (line != null) {
-                            	line = session.readLine();
-                            }
-                        	HTTPRequest request = null;
-                        	try {
-                        		request = new HTTPRequest(session.getLines());
-                        	}catch (Exception e){
-                        		throw new BadRequest();
-                        	}
-                            session.sendResponse(handle(session, request));
-                            ++sessionsCount;
-                        }
+                        boolean hasData = session.readData();                  
+                    	if (hasData) {
+                    		HTTPRequest request = null;
+	                    	try {
+	                    		request = new HTTPRequest(session.getRequestData());
+	                    	}catch (Exception e){
+	                    		throw new BadRequestException();
+	                    	}
+	                        session.sendResponse(handle(session, request));
+	                        ++sessionsCount;
+                    	}
                     }
-                }catch (BadRequest br){
+                }catch (BadRequestException br){
                     if (key.attachment() instanceof HTTPSession) {
                         ((HTTPSession) key.attachment()).sendResponse(new HttpResponseBadRequest(""));
                     }
@@ -119,14 +113,14 @@ public class WebServer implements Runnable {
                 	logger.log(Level.SEVERE, "Error handling client: " + key.channel(),ex);
                 }finally {
                     if (key.attachment() instanceof HTTPSession) {
+                    	key.cancel();
                         ((HTTPSession) key.attachment()).close();
-                    }                    	
+                    }                    	                	                	
                 }
             }
         } catch (Throwable t) {
             logger.log(Level.SEVERE, "Error in server execution. Halting server.",t);
         	shutdown();
-            System.exit(1);
         }
     }
  
