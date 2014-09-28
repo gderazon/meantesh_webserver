@@ -27,6 +27,7 @@ public class HTTPResponse {
     }
 
     public HTTPResponse(int responseCode,String responseReason) {
+    	this();
     	this.responseCode = responseCode;
     	this.responseReason = responseReason;
     }
