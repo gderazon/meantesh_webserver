@@ -5,7 +5,8 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
- * Http Response 
+ * Http Response data structure. 
+ * Should be used as a base class for different return statuses responses.
  * @author gderazon
  */
 public class HTTPResponse {
@@ -32,7 +33,7 @@ public class HTTPResponse {
     
     public void addDefaultHeaders() {
         headers.put("Date", new Date().toString());
-        headers.put("Server", "Java NIO Webserver by md_5");
+        headers.put("Server", "Java NIO Webserver by Golan D inspired by md_5");
         headers.put("Connection", "close");
         headers.put("Content-Length", Integer.toString(content.length));
     }
